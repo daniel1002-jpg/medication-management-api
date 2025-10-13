@@ -1,12 +1,23 @@
 const express = require('express');
-const app = express();
 const patientsRoutes = require('./routes/patients')
+
 const port = 3000;
+const app = express();
 // const db = require('./database/db'); // conecction to database
 
+// Middleware
 app.use(express.json()); // for app use json
 
+// Routes
 app.use('/api/patients', patientsRoutes);
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).json({
+        success: false,
+        message: 'Error interno del servidor'
+    });
+});
 
 // app.post('/api/casos', async (req, res) => {
 //     try {
@@ -20,6 +31,8 @@ app.use('/api/patients', patientsRoutes);
 //         res.status(500).json({ error: 'Error al guardar el caso clínico' });
 //     }
 // });
+
+module.exports = app;
 
 app.listen(port, () => {
     console.log(`Servidor escuchando en http://localhost:${port}`);
