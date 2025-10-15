@@ -7,14 +7,17 @@ const createPatient = async (patientData) => {
         throw new Error('El nombre y el email son obligatorios');
     }
 
+    const cleanedEmail = email.trim().toLowerCase();
+    const cleanedName = nombre.trim();
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(cleanedEmail)) {
         throw new Error('Formato de email inválido')
     }
 
     const patientToCreate = {
-        nombre: nombre.trim(),
-        email: email.trim().toLowerCase(),
+        nombre: cleanedName,
+        email: cleanedEmail,
         numero_telefono,
         domicilio,
         fecha_nacimiento,
