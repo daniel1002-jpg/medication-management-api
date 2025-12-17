@@ -8,4 +8,7 @@ router.get('/', patientController.getAllPatients);
 // POST /api/patients
 router.post('/', patientController.createPatient);
 
+// GET /api/patients/:id
+router.get('/:id', patientController.getPatientById);
+
 module.exports = router;

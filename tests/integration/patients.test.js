@@ -179,4 +179,36 @@ describe('Patients API Integration Tests', () => {
             });
         });
     });
+
+    describe('GET /api/patients/:id', () => {
+        it('should return patient by id from database', async () => {
+            await testPool.query(`
+                INSERT INTO pacientes (nombre, email, numero_telefono, domicilio, fecha_nacimiento, fecha_alta, obra_social)
+                VALUES ('Test Patient', 'test@example.com', '123456789', 'Street 1', '1990-01-01', '2025-01-01', 'OSDE')
+            `);
+
+            const response = await request(app)
+                .get('/api/patients/1')
+                .expect(200);
+            
+            expect(response.body.success).toBe(true);
+            expect(response.body.data).toMatchObject({
+                id: 1,
+                nombre: 'Test Patient',
+                email: 'test@example.com'
+            });
+        });
+
+        it('should return 404 when patient does not exist', async () => {
+            const response = await request(app)
+                .get('/api/patients/999')
+                .expect(404);
+
+            expect(response.body).toEqual({
+                success: false,
+                message: 'Paciente no encontrado',
+                type: 'not_found_error'
+            });
+        });
+    });
 });
