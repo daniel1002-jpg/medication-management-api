@@ -32,11 +32,21 @@ app.use((err, req, res, next) => {
     // Validation errors (400)
     if (err.message.includes('obligatorios') || 
         err.message.includes('inválido') || 
-        err.message.includes('email')) {
+        err.message.includes('email') ||
+        err.message.includes('requerido')) {
         return res.status(400).json({ 
             success: false, 
             message: err.message,
             type: 'validation_error' 
+        });
+    }
+
+    // Not found errors (404)
+    if (err.message.includes('no encontrado')) {
+        return res.status(404).json({
+            success: false,
+            message: err.message,
+            type: 'not_found_error'
         });
     }
 
