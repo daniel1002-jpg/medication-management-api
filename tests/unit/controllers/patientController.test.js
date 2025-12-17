@@ -178,5 +178,21 @@ describe('Patient Controller', () => {
             expect(patientService.getPatientById).toHaveBeenCalledTimes(1);
             expect(patientService.getPatientById).toHaveBeenCalledWith('1');
         });
+
+        it('should return 404 when patient not found', async () => {
+            patientService.getPatientById.mockRejectedValue(
+                new Error('Paciente no encontrado')
+            );
+
+            const response = await request(app)
+                .get('/patients/999')
+                .expect(404);
+
+            expect(response.body).toEqual({
+                success: false,
+                message: 'Paciente no encontrado',
+                type: 'not_found_error'
+            });
+        });
     });
 });
