@@ -27,10 +27,14 @@ const getAllPatients = async (req, res, next) => {
 
 const getPatientById = async (req, res, next) => {
     const { id } = req.params;
-    res.json({
-        success: true,
-        data: await patientService.getPatientById(id)
-    });
+    try {
+        res.json({
+            success: true,
+            data: await patientService.getPatientById(id)
+        });
+    } catch (error) {
+        next(error);
+    }
 };
 
 module.exports = {

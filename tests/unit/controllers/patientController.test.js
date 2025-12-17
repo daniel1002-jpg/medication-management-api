@@ -23,6 +23,14 @@ app.use((err, req, res, next) => {
         });
     }
 
+    if (err.message.includes('no encontrado')) {
+        return res.status(404).json({
+            success: false,
+            message: err.message,
+            type: 'not_found_error'
+        });
+    }
+
     res.status(500).json({
         success: false,
         message: 'Error interno del servidor',
