@@ -48,8 +48,30 @@ const findById = async (id) => {
     return result.rows[0] || null;
 }
 
+const update = async (id, updateData) => {
+    const result = await db.query(
+        `UPDATE pacientes 
+         SET nombre = $1, email = $2, numero_telefono = $3, domicilio = $4, fecha_nacimiento = $5, fecha_alta = $6, obra_social = $7
+         WHERE id = $8
+         RETURNING *`,
+        [
+            updateData.nombre,
+            updateData.email,
+            updateData.numero_telefono,
+            updateData.domicilio,
+            updateData.fecha_nacimiento,
+            updateData.fecha_alta,
+            updateData.obra_social,
+            id
+        ]
+    );
+
+    return result.rows[0];
+}
+
 module.exports = {
     create,
     findAll,
-    findById
+    findById,
+    update
 };
