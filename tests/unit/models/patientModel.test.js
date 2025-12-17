@@ -176,5 +176,14 @@ describe('PatientModel', () => {
                 ]
             );
         });
+
+        it('should return null when patient does not exist', async () => {
+            const mockQueryResult = { rows: [] };
+            db.query.mockResolvedValue(mockQueryResult);
+
+            const result = await patientModel.update(999, mockPatientData.valid);
+
+            expect(result).toBeNull();
+        });
     });
 });
