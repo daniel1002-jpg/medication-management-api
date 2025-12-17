@@ -45,7 +45,7 @@ const findById = async (id) => {
         [id]
     );
 
-    return result.rows[0];
+    return result.rows[0] || null;
 }
 
 module.exports = {

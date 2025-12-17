@@ -128,4 +128,17 @@ describe('findById', () => {
             [1]
         );
     });
+
+    it('should return null when patient does not exist', async () => {
+        const mockQueryResult = { rows: [] };
+        db.query.mockResolvedValue(mockQueryResult);
+
+        const result = await patientModel.findById(999);
+
+        expect(result).toBeNull();
+        expect(db.query).toHaveBeenCalledWith(
+            expect.stringContaining('SELECT * FROM pacientes WHERE id = $1'),
+            [999]
+        );
+    });
 });
