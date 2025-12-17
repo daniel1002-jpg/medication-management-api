@@ -204,19 +204,19 @@ describe('Patient Controller', () => {
             });
         });
 
-        it('should return 400 when id is missing', async () => {
+        it('should return 400 for invalid format', async () => {
             patientService.getPatientById.mockRejectedValue(
                 new Error('ID de paciente es requerido')
             );
 
             const response = await request(app)
-                .get('/patients/')
-                .expect(404);
+                .get('/patients/abc')
+                .expect(400);
 
             expect(response.body).toEqual({
                 success: false,
                 message: 'ID de paciente es requerido',
-                type: 'not_found_error'
+                type: 'validation_error'
             });
         });
     });

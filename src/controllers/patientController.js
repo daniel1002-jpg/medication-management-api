@@ -26,11 +26,12 @@ const getAllPatients = async (req, res, next) => {
 };
 
 const getPatientById = async (req, res, next) => {
-    const { id } = req.params;
     try {
+        const { id } = req.params;
+        const patient = await patientService.getPatientById(id);
         res.json({
             success: true,
-            data: await patientService.getPatientById(id)
+            data: patient
         });
     } catch (error) {
         next(error);
