@@ -39,7 +39,17 @@ const findAll = async () => {
     return result.rows;
 };
 
+const findById = async (id) => {
+    const result = await db.query(
+        'SELECT * FROM pacientes WHERE id = $1',
+        [id]
+    );
+
+    return result.rows[0];
+}
+
 module.exports = {
     create,
-    findAll
+    findAll,
+    findById
 };
