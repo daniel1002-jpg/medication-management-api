@@ -113,3 +113,19 @@ describe('PatientModel', () => {
         });
     });
 });
+
+describe('findById', () => {
+    it('should find patient by id', async () => {
+        const mockQueryResult = { rows: [mockDbResponse] };
+        db.query.mockResolvedValue(mockQueryResult);
+
+        const result = await patientModel.findById(1);
+
+        expect(result).toEqual(mockDbResponse);
+        expect(db.query).toHaveBeenCalledTimes(1);
+        expect(db.query).toHaveBeenCalledWith(
+            expect.stringContaining('SELECT * FROM pacientes WHERE id = $1'),
+            [1]
+        );
+    });
+});
