@@ -32,7 +32,21 @@ const getAllPatients = async() => {
     return await patientModel.findAll();
 };
 
+const getPatientById = async (id) => {
+    if (!id) {
+        throw new Error('ID de paciente es requerido');
+    }
+    
+    const patient = await patientModel.findById(id);
+    if (!patient) {
+        throw new Error('Paciente no encontrado');
+    }
+    
+    return patient;
+};
+
 module.exports = {
     createPatient,
-    getAllPatients
+    getAllPatients,
+    getPatientById
 };
