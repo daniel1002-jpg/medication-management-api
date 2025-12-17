@@ -66,7 +66,7 @@ const update = async (id, updateData) => {
         ]
     );
 
-    return result.rows[0];
+    return result.rows[0] || null;
 }
 
 module.exports = {
