@@ -15,7 +15,8 @@ app.get('/patients/:id', patientController.getPatientById);
 app.use((err, req, res, next) => {
     if (err.message.includes('obligatorios') ||
         err.message.includes('inválidos') ||
-        err.message.includes('email')) {
+        err.message.includes('email') ||
+        err.message.includes('requerido')) {
         return res.status(400).json({ 
             success: false,
             message: err.message,
@@ -199,6 +200,22 @@ describe('Patient Controller', () => {
             expect(response.body).toEqual({
                 success: false,
                 message: 'Paciente no encontrado',
+                type: 'not_found_error'
+            });
+        });
+
+        it('should return 400 when id is missing', async () => {
+            patientService.getPatientById.mockRejectedValue(
+                new Error('ID de paciente es requerido')
+            );
+
+            const response = await request(app)
+                .get('/patients/')
+                .expect(404);
+
+            expect(response.body).toEqual({
+                success: false,
+                message: 'ID de paciente es requerido',
                 type: 'not_found_error'
             });
         });
