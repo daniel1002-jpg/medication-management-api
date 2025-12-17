@@ -75,4 +75,30 @@ describe('PatientService', () => {
             expect(patientModel.findAll).toHaveBeenCalledTimes(1);
         });
     });
+
+    describe('getPatientById', () => {
+        it('should return a patient when found', async () => {
+            patientModel.findById.mockResolvedValue(mockDbResponse);
+
+            const result = await patientService.getPatientById(1);
+
+            expect(result).toEqual(mockDbResponse);
+            expect(patientModel.findById).toHaveBeenCalledTimes(1);
+            expect(patientModel.findById).toHaveBeenCalledWith(1);
+        });
+
+        it('should throw error when patient not found', async () => {
+            patientModel.findById.mockResolvedValue(null);
+
+            await expect(patientService.getPatientById(999))
+                .rejects
+                .toThrow('Paciente no encontrado');
+        });
+
+        it('should validate that id is provided', async () => {
+            await expect(patientService.getPatientById())
+                .rejects
+                .toThrow('ID de paciente es requerido');
+        });
+    });
 })
