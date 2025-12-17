@@ -174,7 +174,9 @@ describe('Patient Controller', () => {
                 success: true,
                 data: mockDbResponse
             });
-            expect(patientService.getPatientById).toHaveBeenCalledTimes('1');
+
+            expect(patientService.getPatientById).toHaveBeenCalledTimes(1);
+            expect(patientService.getPatientById).toHaveBeenCalledWith('1');
         });
     });
 });
