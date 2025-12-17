@@ -112,33 +112,69 @@ describe('PatientModel', () => {
                 .toThrow('Connection timeout');
         });
     });
-});
 
-describe('findById', () => {
-    it('should find patient by id', async () => {
-        const mockQueryResult = { rows: [mockDbResponse] };
-        db.query.mockResolvedValue(mockQueryResult);
+    describe('findById', () => {
+        it('should find patient by id', async () => {
+            const mockQueryResult = { rows: [mockDbResponse] };
+            db.query.mockResolvedValue(mockQueryResult);
 
-        const result = await patientModel.findById(1);
+            const result = await patientModel.findById(1);
 
-        expect(result).toEqual(mockDbResponse);
-        expect(db.query).toHaveBeenCalledTimes(1);
-        expect(db.query).toHaveBeenCalledWith(
-            expect.stringContaining('SELECT * FROM pacientes WHERE id = $1'),
-            [1]
-        );
+            expect(result).toEqual(mockDbResponse);
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith(
+                expect.stringContaining('SELECT * FROM pacientes WHERE id = $1'),
+                [1]
+            );
+        });
+
+        it('should return null when patient does not exist', async () => {
+            const mockQueryResult = { rows: [] };
+            db.query.mockResolvedValue(mockQueryResult);
+
+            const result = await patientModel.findById(999);
+
+            expect(result).toBeNull();
+            expect(db.query).toHaveBeenCalledWith(
+                expect.stringContaining('SELECT * FROM pacientes WHERE id = $1'),
+                [999]
+            );
+        });
     });
 
-    it('should return null when patient does not exist', async () => {
-        const mockQueryResult = { rows: [] };
-        db.query.mockResolvedValue(mockQueryResult);
+    describe('update', () => {
+        it('should update a patient in the database', async () => {
+            const patientData = {
+                nombre: 'Juan Pérez',
+                email: 'juan.perez@example.com',
+                numero_telefono: '123456789',
+                domicilio: 'Calle Test 123',
+                fecha_nacimiento: '1990-01-01',
+                fecha_alta: new Date('2023-10-01T12:00:00.000Z'),
+                obra_social: 'OSDE'
+            };
+            const mockQueryResult = {
+                rows: [mockDbResponse],
+            };
+            db.query.mockResolvedValue(mockQueryResult);
 
-        const result = await patientModel.findById(999);
+            const result = await patientModel.update(1, patientData);
 
-        expect(result).toBeNull();
-        expect(db.query).toHaveBeenCalledWith(
-            expect.stringContaining('SELECT * FROM pacientes WHERE id = $1'),
-            [999]
-        );
+            expect(result).toEqual(mockDbResponse);
+            expect(db.query).toHaveBeenCalledTimes(1);
+            expect(db.query).toHaveBeenCalledWith(
+                expect.stringContaining('UPDATE pacientes'),
+                [
+                    'Juan Pérez',
+                    'juan.perez@example.com',
+                    '123456789',
+                    'Calle Test 123',
+                    '1990-01-01',
+                    patientData.fecha_alta,
+                    'OSDE',
+                    1
+                ]
+            );
+        });
     });
 });
