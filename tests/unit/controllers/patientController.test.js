@@ -10,6 +10,7 @@ const app = express();
 app.use(express.json());
 app.post('/patients', patientController.createPatient);
 app.get('/patients', patientController.getAllPatients);
+app.get('/patients/:id', patientController.getPatientById);
 
 app.use((err, req, res, next) => {
     if (err.message.includes('obligatorios') ||
@@ -158,6 +159,22 @@ describe('Patient Controller', () => {
                 message: 'Error interno del servidor',
                 type: 'server_error'
             });
+        });
+    });
+
+    describe('GET /patients/:id', () => {
+        it('should return patient when found', async () => {
+            patientService.getPatientById.mockResolvedValue(mockDbResponse);
+
+            const response = await request(app)
+                .get('/patients/1')
+                .expect(200);
+
+            expect(response.body).toEqual({
+                success: true,
+                data: mockDbResponse
+            });
+            expect(patientService.getPatientById).toHaveBeenCalledTimes('1');
         });
     });
 });
