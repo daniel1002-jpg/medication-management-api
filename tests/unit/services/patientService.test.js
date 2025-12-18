@@ -155,5 +155,13 @@ describe('PatientService', () => {
                 .rejects
                 .toThrow('El nombre y el email son obligatorios');
         });
+
+        it('should throw error when email format is invalid', async () => {
+            const patientData = mockPatientData.invalid.invalidEmail;
+
+            await expect(patientService.updatePatient(1, patientData))
+                .rejects
+                .toThrow('Formato de email inválido');
+        });
     });
 })
