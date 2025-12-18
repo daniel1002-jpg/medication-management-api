@@ -200,5 +200,14 @@ describe('PatientModel', () => {
                 [1]
             );
         });
+
+        it('should return null when patient does not exist', async () => {
+            const mockQueryResult = { rows: [] };
+            db.query.mockResolvedValue(mockQueryResult);
+
+            const result = await patientModel.deleteById(999);
+
+            expect(result).toBeNull();
+        });
     });
 });
