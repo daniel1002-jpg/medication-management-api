@@ -182,4 +182,30 @@ describe('PatientService', () => {
             );
         });
     });
+
+    describe('deletePatient', () => {
+        it('should delete patient successfully', async () => {
+            patientModel.deleteById.mockResolvedValue(mockDbResponse);
+
+            const result = await patientService.deletePatient(1);
+
+            expect(result).toEqual(mockDbResponse);
+            expect(patientModel.deleteById).toHaveBeenCalledTimes(1);
+            expect(patientModel.deleteById).toHaveBeenCalledWith(1);
+        });
+
+        it('should throw error when patient not found', async () => {
+            patientModel.deleteById.mockResolvedValue(null);
+
+            await expect(patientService.deletePatient(999))
+                .rejects
+                .toThrow('Paciente no encontrado');
+        });
+
+        it('should validate that id is required', async () => {
+            await expect(patientService.deletePatient())
+                .rejects
+                .toThrow('ID de paciente es requerido');
+        });
+    });
 })
