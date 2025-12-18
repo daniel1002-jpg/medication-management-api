@@ -258,5 +258,22 @@ describe('Patient Controller', () => {
                 type: 'not_found_error'
             });
         });
+
+        it('should return 400 for invalid email format', async () => {
+            const invalidData = mockPatientData.invalid.invalidEmail;
+            patientService.updatePatient.mockRejectedValue(
+                new Error('Formato de email inválido')
+            );
+
+            const response = await request(app)
+                .put('/patients/1')
+                .send(invalidData)
+                .expect(400);
+            expect(response.body).toEqual({
+                success: false,
+                message: 'Formato de email inválido',
+                type: 'validation_error'
+            });
+        });
     });
 });
