@@ -186,4 +186,19 @@ describe('PatientModel', () => {
             expect(result).toBeNull();
         });
     });
+
+    describe('deleteById', () => {
+        it('should delete a patient by id', async () => {
+            const mockQueryResult = { rows: [mockDbResponse] };
+            db.query.mockResolvedValue(mockQueryResult);
+
+            const result = await patientModel.deleteById(1);
+
+            expect(result).toEqual(mockDbResponse);
+            expect(db.query).toHaveBeenCalledWith(
+                expect.stringContaining('DELETE FROM pacientes WHERE id = $1 RETURNING *'),
+                [1]
+            );
+        });
+    });
 });
