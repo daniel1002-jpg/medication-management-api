@@ -240,5 +240,23 @@ describe('Patient Controller', () => {
             expect(patientService.updatePatient).toHaveBeenCalledTimes(1);
             expect(patientService.updatePatient).toHaveBeenCalledWith('1', patientData);
         });
+
+        it('should return 404 when updating non-existent patient', async () => {
+            const patientData = mockPatientData.valid;
+            patientService.updatePatient.mockRejectedValue(
+                new Error('Paciente no encontrado')
+            );
+
+            const response = await request(app)
+                .put('/patients/999')
+                .send(patientData)
+                .expect(404);
+
+            expect(response.body).toEqual({
+                success: false,
+                message: 'Paciente no encontrado',
+                type: 'not_found_error'
+            });
+        });
     });
 });

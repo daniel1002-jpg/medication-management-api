@@ -43,7 +43,7 @@ const updatePatient = async (req, res, next) => {
         const { id } = req.params;
         const updatedPatient = await patientService.updatePatient(id, req.body);
         
-        return res.json({
+        return res.status(200).json({
             success: true,
             message: 'Paciente actualizado correctamente',
             data: updatedPatient
