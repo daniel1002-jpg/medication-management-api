@@ -5,7 +5,7 @@
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue.svg)](https://postgresql.org/)
 [![Test Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/daniel1002-jpg/medication-management-api)
-[![Tests](https://img.shields.io/badge/Tests-36%20passing-success.svg)](https://github.com/daniel1002-jpg/medication-management-api)
+[![Tests](https://img.shields.io/badge/Tests-50%20passing-success.svg)](https://github.com/daniel1002-jpg/medication-management-api)
 
 A **production-ready REST API** for managing patients in clinical settings, featuring **100% test coverage**, robust error handling, and enterprise-level architecture patterns.
 
@@ -33,11 +33,11 @@ Lines      : 100%
 ```
 
 ### **🧪 Test Structure**
-- **Unit Tests (28)**: Isolated testing with mocks
+- **Unit Tests (40)**: Isolated testing with mocks
   - Service Layer: Business logic validation
   - Model Layer: Database interaction testing  
   - Controller Layer: HTTP request/response testing
-- **Integration Tests (8)**: End-to-end API testing
+- **Integration Tests (10)**: End-to-end API testing
   - Real database interactions
   - Complete request lifecycle validation
   - Error scenario testing
@@ -122,7 +122,8 @@ npm run test:coverage
 |--------|----------|-------------|--------------|
 | `GET` | `/api/patients` | Get all patients | `200` |
 | `POST` | `/api/patients` | Create new patient | `201`, `400`, `409` |
-| `GET`  | `/api/patients/:id` | Get patient from ID | `200`, `400`, `404` |
+| `GET` | `/api/patients/:id` | Get patient from ID | `200`, `400`, `404` |
+| `PUT` | `/api/patients/:id` | Update patient data | `200`, `400`, `404` |
 
 ### **Request/Response Examples**
 
@@ -348,7 +349,7 @@ The API implements comprehensive error handling with appropriate HTTP status cod
 
 ## 📈 **Performance Metrics**
 
-- **Test Execution**: ~3.2s for full test suite (36 tests)
+- **Test Execution**: ~3.2s for full test suite (50 tests)
 - **Coverage Generation**: ~1.5s additional
 - **API Response Time**: <100ms for typical operations
 - **Database Queries**: Optimized with proper indexing
