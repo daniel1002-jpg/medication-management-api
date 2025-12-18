@@ -45,8 +45,13 @@ const getPatientById = async (id) => {
     return patient;
 };
 
+const updatePatient = async (id, patientData) => {
+    return await patientModel.update(id, patientData);
+};
+
 module.exports = {
     createPatient,
     getAllPatients,
-    getPatientById
+    getPatientById,
+    updatePatient
 };
