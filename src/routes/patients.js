@@ -11,4 +11,7 @@ router.post('/', patientController.createPatient);
 // GET /api/patients/:id
 router.get('/:id', patientController.getPatientById);
 
+// PUT /api/patients/:id
+router.put('/:id', patientController.updatePatient);
+
 module.exports = router;

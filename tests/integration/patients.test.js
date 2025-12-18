@@ -211,4 +211,51 @@ describe('Patients API Integration Tests', () => {
             });
         });
     });
+
+    describe('PUT /api/patients/:id', () => {
+        it('should update patient successfully', async () => {
+            await testPool.query(`
+                INSERT INTO pacientes (nombre, email, numero_telefono, domicilio, fecha_nacimiento, fecha_alta, obra_social)
+                VALUES ('Old Name', 'old@example.com', '123456789', 'Old Street', '1980-01-01', '2025-01-01', 'OSDE')
+            `);
+
+            const updateData = {
+                nombre: 'New Name',
+                email: 'new@example.com',
+                numero_telefono: '987654321',
+                domicilio: 'New Street',
+                fecha_nacimiento: '1990-02-02',
+                obra_social: 'Swiss Medical'
+            };
+
+            const response = await request(app)
+                .put('/api/patients/1')
+                .send(updateData)
+                .expect(200);
+
+            expect(response.body).toEqual({
+                success: true,
+                message: 'Paciente actualizado correctamente',
+                data: expect.objectContaining({
+                    id: 1,
+                    nombre: 'New Name',
+                    email: 'new@example.com',
+                    numero_telefono: '987654321',
+                    domicilio: 'New Street',
+                    fecha_nacimiento: '1990-02-02',
+                    obra_social: 'Swiss Medical'
+                })
+            });
+            const dbResult = await testPool.query('SELECT * FROM pacientes WHERE id = $1', [1]);
+            expect(dbResult.rows[0]).toMatchObject({
+                id: 1,
+                nombre: 'New Name',
+                email: 'new@example.com',
+                numero_telefono: '987654321',
+                domicilio: 'New Street',
+                fecha_nacimiento: '1990-02-02',
+                obra_social: 'Swiss Medical'
+            });
+        });
+    });
 });
