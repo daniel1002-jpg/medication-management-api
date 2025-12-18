@@ -145,5 +145,15 @@ describe('PatientService', () => {
                 .rejects
                 .toThrow('El nombre es obligatorio');
         });
+
+        it('should throw error when email is missing in update data', async () => {
+            const patientData = { ...mockPatientData.valid };
+            delete patientData.email;
+            patientModel.update.mockResolvedValue(null);
+
+            await expect(patientService.updatePatient(1, patientData))
+                .rejects
+                .toThrow('El email es obligatorio');
+        });
     });
 })
