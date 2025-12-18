@@ -128,5 +128,13 @@ describe('PatientService', () => {
                 .rejects
                 .toThrow('Paciente no encontrado');
         });
+
+        it('should validate that id is required', async () => {
+            patientModel.update.mockResolvedValue(null);
+
+            await expect(patientService.updatePatient(null, mockPatientData.valid))
+                .rejects
+                .toThrow('ID de paciente es requerido');
+        });
     });
 })
