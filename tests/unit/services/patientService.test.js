@@ -136,5 +136,14 @@ describe('PatientService', () => {
                 .rejects
                 .toThrow('ID de paciente es requerido');
         });
+
+        it('should throw error when name is missing in update data', async () => {
+            const patientData = mockPatientData.invalid.noName;
+            patientModel.update.mockResolvedValue(null);
+
+            await expect(patientService.updatePatient(1, patientData))
+                .rejects
+                .toThrow('El nombre y el email son obligatorios');
+        });
     });
 })
