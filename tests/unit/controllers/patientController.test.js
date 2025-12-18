@@ -11,6 +11,7 @@ app.use(express.json());
 app.post('/patients', patientController.createPatient);
 app.get('/patients', patientController.getAllPatients);
 app.get('/patients/:id', patientController.getPatientById);
+app.put('/patients/:id', patientController.updatePatient);
 
 app.use((err, req, res, next) => {
     if (err.message.includes('obligatorios') ||
@@ -218,6 +219,26 @@ describe('Patient Controller', () => {
                 message: 'ID de paciente es requerido',
                 type: 'validation_error'
             });
+        });
+    });
+
+    describe('PUT /patients/:id', () => {
+        it('should update patient successfully', async () => {
+            const patientData = mockPatientData.valid;
+            patientService.updatePatient.mockResolvedValue(mockDbResponse);
+
+            const response = await request(app)
+                .put('/patients/1')
+                .send(patientData)
+                .expect(200);
+
+            expect(response.body).toEqual({
+                success: true,
+                message: 'Paciente actualizado correctamente',
+                data: mockDbResponse
+            });
+            expect(patientService.updatePatient).toHaveBeenCalledTimes(1);
+            expect(patientService.updatePatient).toHaveBeenCalledWith('1', patientData);
         });
     });
 });
