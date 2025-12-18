@@ -143,7 +143,7 @@ describe('PatientService', () => {
 
             await expect(patientService.updatePatient(1, patientData))
                 .rejects
-                .toThrow('El nombre es obligatorio');
+                .toThrow('El nombre y el email son obligatorios');
         });
 
         it('should throw error when email is missing in update data', async () => {
@@ -153,7 +153,7 @@ describe('PatientService', () => {
 
             await expect(patientService.updatePatient(1, patientData))
                 .rejects
-                .toThrow('El email es obligatorio');
+                .toThrow('El nombre y el email son obligatorios');
         });
     });
 })

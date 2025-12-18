@@ -50,8 +50,8 @@ const updatePatient = async (id, patientData) => {
         throw new Error('ID de paciente es requerido');
     }
     
-    if (!patientData.nombre) {
-        throw new Error('El nombre es obligatorio');
+    if (!patientData.nombre || !patientData.email) {
+        throw new Error('El nombre y el email son obligatorios');
     }
     
     const updatedPatient = await patientModel.update(id, patientData);
