@@ -101,4 +101,24 @@ describe('PatientService', () => {
                 .toThrow('ID de paciente es requerido');
         });
     });
+
+    describe('updatePatient', () => {
+        it('should update patient with valid data', async () => {
+            const patientData = mockPatientData.valid;
+            patientModel.update.mockResolvedValue(mockDbResponse);
+
+            const result = await patientService.updatePatient(1, patientData);
+
+            expect(result).toEqual(mockDbResponse);
+            expect(patientModel.update).toHaveBeenCalledTimes(1);
+            expect(patientModel.update).toHaveBeenCalledWith(1, {
+                nombre: 'Juan Pérez',
+                email: 'juan.perez@example.com',
+                numero_telefono: '123456789',
+                domicilio: 'Calle Test 123',
+                fecha_nacimiento: '1990-01-01',
+                obra_social: 'OSDE'
+            });
+        });
+    });
 })
