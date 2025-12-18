@@ -1,7 +1,7 @@
 const patientModel = require('../models/patientModel');
 
-const createPatient = async (patientData) => {
-    const {nombre, email, numero_telefono, domicilio, fecha_nacimiento, obra_social} = patientData;
+const validateAndCleanPatientData = (patientData) => {
+    const {nombre, email} = patientData;
 
     if (!nombre || !email) {
         throw new Error('El nombre y el email son obligatorios');
@@ -15,17 +15,26 @@ const createPatient = async (patientData) => {
         throw new Error('Formato de email inválido')
     }
 
-    const patientToCreate = {
+    return {
+        ...patientData,
         nombre: cleanedName,
-        email: cleanedEmail,
-        numero_telefono,
-        domicilio,
-        fecha_nacimiento,
-        fecha_alta: new Date(),
-        obra_social
+        email: cleanedEmail
     };
+}
 
-    return await patientModel.create(patientToCreate);
+const checkIdProvided = (id) => {
+    if (!id) {
+        throw new Error('ID de paciente es requerido');
+    }
+};
+
+const createPatient = async (patientData) => {
+    const cleanedData = validateAndCleanPatientData(patientData);
+
+    return await patientModel.create({
+        ...cleanedData,
+        fecha_alta: new Date()
+    });
 };
 
 const getAllPatients = async() => {
@@ -33,10 +42,8 @@ const getAllPatients = async() => {
 };
 
 const getPatientById = async (id) => {
-    if (!id) {
-        throw new Error('ID de paciente es requerido');
-    }
-    
+    checkIdProvided(id);
+
     const patient = await patientModel.findById(id);
     if (!patient) {
         throw new Error('Paciente no encontrado');
@@ -46,33 +53,17 @@ const getPatientById = async (id) => {
 };
 
 const updatePatient = async (id, patientData) => {
-    if (!id) {
-        throw new Error('ID de paciente es requerido');
-    }
-    
-    const {nombre, email} = patientData;
-    if (!nombre || !email) {
-        throw new Error('El nombre y el email son obligatorios');
-    }
+    checkIdProvided(id);
 
-    const cleanedEmail = email.trim().toLowerCase();
-    const cleanedName = nombre.trim();
-
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(cleanedEmail)) {
-        throw new Error('Formato de email inválido')
-    }
-    
+    const cleanedData = validateAndCleanPatientData(patientData);
     const updatedPatient = await patientModel.update(id, {
-        ...patientData,
-        nombre: cleanedName,
-        email: cleanedEmail
+        ...cleanedData
     });
 
     if (!updatedPatient) {
         throw new Error('Paciente no encontrado');
     }
-    
+
     return updatedPatient;
 };
 
