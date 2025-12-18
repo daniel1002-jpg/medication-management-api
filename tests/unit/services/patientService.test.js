@@ -120,5 +120,13 @@ describe('PatientService', () => {
                 obra_social: 'OSDE'
             });
         });
+
+        it('should throw error when updating non-existing patient', async () => {
+            patientModel.update.mockResolvedValue(null);
+
+            await expect(patientService.updatePatient(999, mockPatientData.valid))
+                .rejects
+                .toThrow('Paciente no encontrado');
+        });
     });
 })
