@@ -46,6 +46,10 @@ const getPatientById = async (id) => {
 };
 
 const updatePatient = async (id, patientData) => {
+    if (!id) {
+        throw new Error('ID de paciente es requerido');
+    }
+    
     const updatedPatient = await patientModel.update(id, patientData);
     if (!updatedPatient) {
         throw new Error('Paciente no encontrado');
