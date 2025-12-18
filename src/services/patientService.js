@@ -55,15 +55,24 @@ const updatePatient = async (id, patientData) => {
         throw new Error('El nombre y el email son obligatorios');
     }
 
+    const cleanedEmail = email.trim().toLowerCase();
+    const cleanedName = nombre.trim();
+
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
+    if (!emailRegex.test(cleanedEmail)) {
         throw new Error('Formato de email inválido')
     }
     
-    const updatedPatient = await patientModel.update(id, patientData);
+    const updatedPatient = await patientModel.update(id, {
+        ...patientData,
+        nombre: cleanedName,
+        email: cleanedEmail
+    });
+
     if (!updatedPatient) {
         throw new Error('Paciente no encontrado');
     }
+    
     return updatedPatient;
 };
 
