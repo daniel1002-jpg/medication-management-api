@@ -143,7 +143,7 @@ describe('PatientService', () => {
 
             await expect(patientService.updatePatient(1, patientData))
                 .rejects
-                .toThrow('El nombre y el email son obligatorios');
+                .toThrow('El nombre es obligatorio');
         });
     });
 })

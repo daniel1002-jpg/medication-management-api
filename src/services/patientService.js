@@ -50,6 +50,10 @@ const updatePatient = async (id, patientData) => {
         throw new Error('ID de paciente es requerido');
     }
     
+    if (!patientData.nombre) {
+        throw new Error('El nombre es obligatorio');
+    }
+    
     const updatedPatient = await patientModel.update(id, patientData);
     if (!updatedPatient) {
         throw new Error('Paciente no encontrado');
