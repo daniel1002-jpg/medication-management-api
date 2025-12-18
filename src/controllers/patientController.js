@@ -38,8 +38,24 @@ const getPatientById = async (req, res, next) => {
     }
 };
 
+const updatePatient = async (req, res, next) => {
+    try {
+        const { id } = req.params;
+        const updatedPatient = await patientService.updatePatient(id, req.body);
+        
+        return res.json({
+            success: true,
+            message: 'Paciente actualizado correctamente',
+            data: updatedPatient
+        });
+    } catch (error) {
+        next(error);
+    }
+};
+
 module.exports = {
     createPatient,
     getAllPatients,
-    getPatientById
+    getPatientById,
+    updatePatient
 };
