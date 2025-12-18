@@ -237,13 +237,13 @@ describe('Patients API Integration Tests', () => {
                 success: true,
                 message: 'Paciente actualizado correctamente',
                 data: expect.objectContaining({
-                    id: 1,
                     nombre: 'New Name',
                     email: 'new@example.com',
                     numero_telefono: '987654321',
                     domicilio: 'New Street',
-                    fecha_nacimiento: '1990-02-02',
-                    obra_social: 'Swiss Medical'
+                    fecha_nacimiento: expect.stringContaining('1990-02-02'),
+                    obra_social: 'Swiss Medical',
+                    id: 1,
                 })
             });
             const dbResult = await testPool.query('SELECT * FROM pacientes WHERE id = $1', [1]);
@@ -253,8 +253,31 @@ describe('Patients API Integration Tests', () => {
                 email: 'new@example.com',
                 numero_telefono: '987654321',
                 domicilio: 'New Street',
-                fecha_nacimiento: '1990-02-02',
+                fecha_nacimiento: expect.any(Date),
                 obra_social: 'Swiss Medical'
+            });
+            expect(dbResult.rows[0].fecha_nacimiento.toISOString()).toContain('1990-02-02');
+        });
+
+        it('should return 404 when updating non-existent patient', async () => {
+            const updateData = {
+                nombre: 'Non Existent',
+                email: 'nonexistent@example.com',
+                numero_telefono: '000000000',
+                domicilio: 'Nowhere',
+                fecha_nacimiento: '2000-01-01',
+                obra_social: 'Ninguna'
+            };
+
+            const response = await request(app)
+                .put('/api/patients/999')
+                .send(updateData)
+                .expect(404);
+
+            expect(response.body).toEqual({
+                success: false,
+                message: 'Paciente no encontrado',
+                type: 'not_found_error'
             });
         });
     });
