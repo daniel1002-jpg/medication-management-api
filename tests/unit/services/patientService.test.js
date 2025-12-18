@@ -163,5 +163,23 @@ describe('PatientService', () => {
                 .rejects
                 .toThrow('Formato de email inválido');
         });
+
+        it('should transform email to lowercase and trim spaces', async () => {
+            const patientData = {
+                ...mockPatientData.valid,
+                nombre: '  Juan Pérez  ',
+                email: '  JUAN.PEREZ@EXAMPLE.COM  '
+            };
+            patientModel.update.mockResolvedValue(mockDbResponse);
+
+            await patientService.updatePatient(1, patientData);
+
+            expect(patientModel.update).toHaveBeenCalledWith(1,
+                expect.objectContaining({
+                    nombre: 'Juan Pérez',
+                    email: 'juan.perez@example.com'
+                })
+            );
+        });
     });
 })
