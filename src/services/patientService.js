@@ -50,8 +50,14 @@ const updatePatient = async (id, patientData) => {
         throw new Error('ID de paciente es requerido');
     }
     
-    if (!patientData.nombre || !patientData.email) {
+    const {nombre, email} = patientData;
+    if (!nombre || !email) {
         throw new Error('El nombre y el email son obligatorios');
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        throw new Error('Formato de email inválido')
     }
     
     const updatedPatient = await patientModel.update(id, patientData);
