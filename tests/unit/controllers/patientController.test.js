@@ -12,6 +12,7 @@ app.post('/patients', patientController.createPatient);
 app.get('/patients', patientController.getAllPatients);
 app.get('/patients/:id', patientController.getPatientById);
 app.put('/patients/:id', patientController.updatePatient);
+app.delete('/patients/:id', patientController.deletePatient);
 
 app.use((err, req, res, next) => {
     if (err.message.includes('obligatorios') ||
@@ -274,6 +275,24 @@ describe('Patient Controller', () => {
                 message: 'Formato de email inválido',
                 type: 'validation_error'
             });
+        });
+    });
+
+    describe('DELETE /patients/:id', () => {
+        it('should delete patient successfully', async () => {
+            patientService.deletePatient.mockResolvedValue(mockDbResponse);
+
+            const response = await request(app)
+                .delete('/patients/1')
+                .expect(200);
+
+            expect(response.body).toEqual({
+                success: true,
+                message: 'Paciente eliminado correctamente',
+                data: mockDbResponse
+            });   
+            expect(patientService.deletePatient).toHaveBeenCalledTimes(1);
+            expect(patientService.deletePatient).toHaveBeenCalledWith('1');
         });
     });
 });
