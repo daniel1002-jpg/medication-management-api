@@ -69,9 +69,19 @@ const update = async (id, updateData) => {
     return result.rows[0] || null;
 }
 
+const deleteById = async (id) => {
+    const result = await db.query(
+        'DELETE FROM pacientes WHERE id = $1 RETURNING *',
+        [id]
+    );
+
+    return result.rows[0] || null;
+}
+
 module.exports = {
     create,
     findAll,
     findById,
-    update
+    update,
+    deleteById
 };

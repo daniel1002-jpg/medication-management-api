@@ -67,9 +67,20 @@ const updatePatient = async (id, patientData) => {
     return updatedPatient;
 };
 
+const deletePatient = async (id) => {
+    checkIdProvided(id);
+
+    const deletedPatient = await patientModel.deleteById(id);
+    if (!deletedPatient) {
+        throw new Error('Paciente no encontrado');
+    }
+    return deletedPatient;
+};
+
 module.exports = {
     createPatient,
     getAllPatients,
     getPatientById,
-    updatePatient
+    updatePatient,
+    deletePatient
 };
