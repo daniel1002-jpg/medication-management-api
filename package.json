@@ -9,9 +9,10 @@
     "test:watch": "jest --watch",
     "test:coverage": "jest --coverage",
     "test:unit": "jest tests/unit",
-    "test:unit:services": "jest tests/unit/services",
-    "test:unit:models": "jest tests/unit/models",
-    "test:unit:controllers": "jest tests/unit/controllers",
+    "test:unit:entities": "jest tests/unit/domain/entities",
+    "test:unit:cases": "jest tests/unit/application/use-cases",
+    "test:unit:repositories": "jest tests/unit/infrastructure/database",
+    "test:unit:controllers": "jest tests/unit/interfaces/controllers",
     "test:integration": "jest tests/integration"
   },
   "keywords": [],

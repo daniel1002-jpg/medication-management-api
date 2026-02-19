@@ -1,4 +1,4 @@
-const db = require('./db');
+const db = require('../clean/infrastructure/config/database');
 
 async function testConnection() {
     try {

@@ -9,6 +9,7 @@ module.exports = {
         'src/**/*.js',
         '!src/app.js',
         '!**/node_modules/**',
+        "!src/domain/repositories/*.js"
     ],
     coverageDirectory: 'coverage',
     coverageReporters: ['text', 'lcov', 'html'],
