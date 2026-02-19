@@ -1,19 +1,11 @@
 const request = require('supertest');
-const { Pool } = require('pg');
-const app = require('../../src/app'); 
+const app = require('../../src/app');
+const { testPool, resetPacientesTable } = require('../helpers/testHelper');
 
-const testPool = new Pool({
-    user: 'postgres',
-    host: 'localhost',
-    database: 'clinical_cases_test_db',
-    password: 'clinical_db_password123',
-    port: 5432,
-});
 
 describe('Patients API Integration Tests', () => {
     beforeEach(async () => {
-        await testPool.query('DELETE FROM pacientes');
-        await testPool.query('ALTER SEQUENCE pacientes_id_seq RESTART WITH 1');
+        await resetPacientesTable();
     });
 
     afterAll(async () => {
