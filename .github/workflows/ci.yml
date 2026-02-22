@@ -17,7 +17,7 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: clinical_case_test_db
+          POSTGRES_DB: clinical_cases_test_db
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
@@ -52,7 +52,7 @@ jobs:
           echo "PGPORT=5432" >> $GITHUB_ENV
           echo "PGUSER=postgres" >> $GITHUB_ENV
           echo "PGPASSWORD=postgres" >> $GITHUB_ENV
-          echo "PGDATABASE=clinical_case_test_db" >> $GITHUB_ENV
+          echo "PGDATABASE=clinical_cases_test_db" >> $GITHUB_ENV
 
       - name: Run tests
         run: npm test
