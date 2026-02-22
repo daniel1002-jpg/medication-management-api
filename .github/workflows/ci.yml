@@ -41,7 +41,7 @@ jobs:
           echo "DATABASE_TEST_URL=postgres://postgres:postgres@localhost:5432/clinical_cases_test_db" >> $GITHUB_ENV
 
       - name: Run DB migrations
-        run: npm run migrate
+        run: bash migrate-db.sh DATABASE_TEST_URL
         working-directory: apps/core
         env:
           DATABASE_URL: ${{ env.DATABASE_TEST_URL }}
