@@ -17,7 +17,9 @@ jobs:
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
-          POSTGRES_DB: clinical_cases_test_db
+          POSTGRES_TEST_DB: clinical_cases_test_db
+          DB_HOST: localhost
+          DB_PORT: 5432
         options: >-
           --health-cmd pg_isready
           --health-interval 10s
