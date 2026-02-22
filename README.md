@@ -293,30 +293,37 @@ Response ← Controller ← UseCase ← Repository ← DB
 - Validación de ciclo completo de requests y errores
 - Ubicación: `tests/integration/`
 
-### **Comandos útiles de testing**
-```bash
-# Modo watch para desarrollo
-npm run test:watch
+### **Comandos útiles de testing y scripts npm**
 
-# Ejecutar solo casos de uso
-npm run test:unit:services
-# Ejecutar solo repositorios
-npm run test:unit:models
-# Ejecutar solo controladores
-npm run test:unit:controllers
+| Script                | Descripción                                 |
+|-----------------------|---------------------------------------------|
+| `npm run dev`         | Inicia el servidor en modo desarrollo        |
+| `npm start`           | Inicia el servidor en modo producción        |
+| `npm test`            | Ejecuta todos los tests                     |
+| `npm run test:unit`   | Ejecuta tests unitarios                     |
+| `npm run test:integration` | Ejecuta tests de integración             |
+| `npm run test:coverage`    | Genera reporte de cobertura              |
+| `npm run test:watch`  | Ejecuta tests en modo watch (desarrollo)    |
+| `npm run test:unit:services` | Testea solo casos de uso               |
+| `npm run test:unit:models`   | Testea solo repositorios               |
+| `npm run test:unit:controllers` | Testea solo controladores           |
 
-# Solo integración
-npm run test:integration
-
-# Cobertura con reporte HTML
-npm run test:coverage
-```
+> Puedes consultar todos los scripts disponibles en `package.json`.
 
 ---
 
 ## 🔧 **Variables de entorno**
 
-Crea un archivo `.env` en la raíz del proyecto:
+Configura tus variables de entorno usando el archivo `.env.example` como plantilla:
+
+```bash
+cp .env.example .env
+# Edita .env con tus credenciales reales
+```
+
+> **Importante:** Nunca subas tu archivo `.env` real al repositorio. Usa `.env.example` para compartir la estructura de variables.
+
+Crea el archivo `.env` en la raíz del proyecto con los siguientes valores:
 
 ```bash
 # Configuración de la base de datos
@@ -358,6 +365,38 @@ La API implementa manejo de errores con códigos HTTP apropiados:
 
 ---
 
+---
+
+## Despliegue local con Docker
+
+Levanta toda la infraestructura (Node.js, PostgreSQL y Redis) con un solo comando:
+
+```bash
+docker-compose up --build
+```
+
+Esto hará:
+- Construir la imagen de la app Node.js en modo desarrollo.
+- Levantar una base de datos PostgreSQL (puerto local 5433).
+- Levantar un servidor Redis (puerto local 6380).
+
+Para detener y eliminar los contenedores:
+
+```bash
+docker-compose down
+```
+
+Los datos de la base y Redis se mantienen en volúmenes persistentes (no se pierden al bajar los servicios).
+
+Si necesitas limpiar los datos completamente, ejecuta:
+
+```bash
+docker-compose down -v
+```
+Asegúrate de que tus variables de entorno en la app coincidan con las del servicio (ver docker-compose.yml).
+
+---
+
 ## 🛠️ **Stack tecnológico**
 
 ### **Backend**
@@ -386,6 +425,7 @@ La API implementa manejo de errores con códigos HTTP apropiados:
 
 ## 🎯 **Buenas prácticas**
 
+- ✅ **CI/CD:** Los tests y cobertura se ejecutan automáticamente en cada Pull Request y push a main usando GitHub Actions ([ver workflow](.github/workflows/ci.yml)).
 - ✅ **Separación de capas:** Clean Architecture
 - ✅ **Manejo de errores:** Middleware centralizado
 - ✅ **Validación de entrada:** En entidades y casos de uso
@@ -394,6 +434,7 @@ La API implementa manejo de errores con códigos HTTP apropiados:
 - ✅ **Testing:** Pruebas unitarias y de integración
 - ✅ **Cobertura:** >90% recomendado
 - ✅ **Git:** Branches por feature y commits limpios
+- ✅ **Seguridad de dependencias:** Revisa periódicamente con `npm audit` y considera usar [dependabot](https://github.com/dependabot).
 
 ---
 
@@ -413,6 +454,8 @@ La API implementa manejo de errores con códigos HTTP apropiados:
 ## 📄 **Licencia**
 
 Este proyecto está bajo licencia ISC.
+
+[Ver archivo LICENSE](./LICENSE)
 
 ---
 
