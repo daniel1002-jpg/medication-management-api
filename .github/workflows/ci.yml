@@ -9,6 +9,20 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:15
+        ports:
+          - 5432:5432
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,6 +36,14 @@ jobs:
         run: npm install
         working-directory: apps/core
 
+      - name: Set environment variables
+        run: |
+          echo "PGHOST=localhost" >> $GITHUB_ENV
+          echo "PGPORT=5432" >> $GITHUB_ENV
+          echo "PGUSER=testuser" >> $GITHUB_ENV
+          echo "PGPASSWORD=testpass" >> $GITHUB_ENV
+          echo "PGDATABASE=testdb" >> $GITHUB_ENV
+
       - name: Run tests
         run: npm test
         working-directory: apps/core
@@ -34,4 +56,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: coverage-report
-          path: coverage/lcov-report/
+          path: apps/core/coverage/lcov-report/
