@@ -54,6 +54,14 @@ jobs:
           echo "DB_HOST=localhost" >> $GITHUB_ENV
           echo "DB_PORT=5432" >> $GITHUB_ENV
 
+      - name: Wait for Postgres
+        run: |
+          for i in {1..30}; do
+            pg_isready -h localhost -p 5432 && break
+            echo "Waiting for Postgres ($i/30)..."
+            sleep 2
+          done
+
       - name: Run tests
         run: npm test
         working-directory: apps/core
