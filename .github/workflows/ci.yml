@@ -48,11 +48,11 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "PGHOST=localhost" >> $GITHUB_ENV
-          echo "PGPORT=5432" >> $GITHUB_ENV
-          echo "PGUSER=postgres" >> $GITHUB_ENV
-          echo "PGPASSWORD=postgres" >> $GITHUB_ENV
-          echo "PGDATABASE=clinical_cases_test_db" >> $GITHUB_ENV
+          echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
+          echo "POSTGRES_TEST_DB=clinical_cases_test_db" >> $GITHUB_ENV
+          echo "DB_HOST=localhost" >> $GITHUB_ENV
+          echo "DB_PORT=5432" >> $GITHUB_ENV
 
       - name: Run tests
         run: npm test
