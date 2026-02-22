@@ -63,7 +63,7 @@ jobs:
           done
 
       - name: Run tests
-        run: npm test
+        run: npm test -- --detectOpenHandles
         working-directory: apps/core
 
       - name: Run coverage
