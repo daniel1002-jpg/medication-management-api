@@ -20,12 +20,15 @@ jobs:
 
       - name: Install dependencies
         run: npm install
+        working-directory: apps/core
 
       - name: Run tests
         run: npm test
+        working-directory: apps/core
 
       - name: Run coverage
         run: npm run test:coverage
+        working-directory: apps/core
 
       - name: Upload coverage report
         uses: actions/upload-artifact@v4
