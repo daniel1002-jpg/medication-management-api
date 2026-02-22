@@ -1,0 +1,11 @@
+node_modules
+.env
+coverage
+tests
+*.md
+*.log
+.git
+.DS_Store
+Thumbs.db
+.vscode/
+database/

@@ -1,133 +1,135 @@
-# 🏥 Medication Management API
+# 🏥 API de Gestión de Medicación
 
-> **Enterprise-grade Node.js API** with comprehensive testing ecosystem and production-ready architecture
+> **API Node.js** con arquitectura Clean, testing profesional y cobertura de código medible
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue.svg)](https://postgresql.org/)
-[![Test Coverage](https://img.shields.io/badge/Coverage-100%25-brightgreen.svg)](https://github.com/daniel1002-jpg/medication-management-api)
-[![Tests](https://img.shields.io/badge/Tests-50%20passing-success.svg)](https://github.com/daniel1002-jpg/medication-management-api)
+[![Cobertura](https://img.shields.io/badge/Cobertura-94%25-brightgreen.svg)](./coverage/lcov-report/index.html)
+[![Tests](https://img.shields.io/badge/Tests-61%20passing-success.svg)](./coverage/lcov-report/index.html)
 
-A **production-ready REST API** for managing patients in clinical settings, featuring **100% test coverage**, robust error handling, and enterprise-level architecture patterns.
-
----
-
-## ✨ **Key Features**
-
-- 🏗️ **Clean MVC Architecture** - Separation of concerns with Controllers, Services, and Models
-- 🧪 **100% Test Coverage** - Unit and Integration tests with Jest + Supertest  
-- 🔒 **Data Validation** - Comprehensive input validation and sanitization
-- 🗄️ **PostgreSQL Integration** - Robust database layer with constraints
-- 🚦 **Professional Error Handling** - HTTP status codes and structured responses
-- 🔧 **Environment Separation** - Development vs Test database isolation
+API REST para la gestión de pacientes en entornos clínicos, basada en Clean Architecture, con separación de capas, pruebas unitarias y de integración. Cobertura actual: **94%**.
 
 ---
 
-## 🏆 **Testing Ecosystem**
+## ✨ **Características principales**
 
-### **📊 Coverage Metrics**
+- 🏗️ **Clean Architecture**: Separación en Domain, Application, Infrastructure, Interfaces y Shared
+- 🧪 **Testing profesional**: Pruebas unitarias y de integración con Jest y Supertest
+- 🔒 **Validación de datos**: Validaciones y normalización en entidades y casos de uso
+- 🗄️ **PostgreSQL**: Capa de infraestructura desacoplada
+- 🚦 **Manejo de errores**: Respuestas estructuradas y códigos HTTP correctos
+- 🔧 **Ambientes separados**: Bases de datos para desarrollo y testing
+
+---
+
+## 🧪 **Testing y cobertura**
+
+### **📊 Cobertura actual**
 ```
-Statements : 100%
-Branches   : 100%
-Functions  : 100%
-Lines      : 100%
+Statements : 94.2%
+Branches   : 83.33%
+Functions  : 82.85%
+Lines      : 94.2%
 ```
 
-### **🧪 Test Structure**
-- **Unit Tests (40)**: Isolated testing with mocks
-  - Service Layer: Business logic validation
-  - Model Layer: Database interaction testing  
-  - Controller Layer: HTTP request/response testing
-- **Integration Tests (10)**: End-to-end API testing
-  - Real database interactions
-  - Complete request lifecycle validation
-  - Error scenario testing
+### **Estructura de pruebas**
+- **Unitarias:**
+  - Entidades (domain)
+  - Casos de uso (application)
+  - Repositorios (infrastructure)
+  - Controladores (interfaces)
+- **Integración:**
+  - API completa contra base de datos real
+  - Validación de errores y restricciones
 
 ---
 
-## 🚀 **Quick Start**
+## 🚀 **Inicio rápido**
 
-### **Prerequisites**
+### **Requisitos**
 - Node.js 18+
 - PostgreSQL 13+
-- npm or yarn
+- npm o yarn
 
-### **Installation**
+### **Instalación**
 ```bash
-# Clone repository
+# Clonar el repositorio
 git clone https://github.com/daniel1002-jpg/medication-management-api.git
 cd medication-management-api
 
-# Install dependencies
+# Instalar dependencias
 npm install
 
-# Setup environment variables
+# Configurar variables de entorno
 cp .env.example .env
-# Edit .env with your database credentials
+# Edita .env con tus credenciales de base de datos
 ```
 
-### **Database Setup**
+### **Configuración de la base de datos**
 ```sql
--- Create development database
+-- Crear base de datos de desarrollo
 CREATE DATABASE clinical_cases_db;
 
--- Create test database  
+-- Crear base de datos de testing
 CREATE DATABASE clinical_cases_test_db;
 
--- Connect to development database
+-- Conectarse a la base de desarrollo
 \c clinical_cases_db
 
--- Create patients table
+-- Crear tabla de pacientes
 CREATE TABLE pacientes (
-    id SERIAL PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    email VARCHAR(255) UNIQUE NOT NULL,
-    numero_telefono VARCHAR(20),
-    domicilio TEXT,
-    fecha_nacimiento DATE,
-    fecha_alta DATE,
-    obra_social VARCHAR(255),
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  id SERIAL PRIMARY KEY,
+  nombre VARCHAR(255) NOT NULL,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  numero_telefono VARCHAR(20),
+  domicilio TEXT,
+  fecha_nacimiento DATE,
+  fecha_alta DATE,
+  obra_social VARCHAR(255),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Repeat for test database
+-- Repetir para la base de testing
 \c clinical_cases_test_db
--- (run the same CREATE TABLE command)
+-- (ejecutar el mismo comando CREATE TABLE)
 ```
 
-### **Running the Application**
+### **Ejecutar la aplicación**
 ```bash
-# Development server
+# Servidor de desarrollo
 npm run dev
 
-# Production server
+# Servidor de producción
 npm start
 
-# Run all tests
+# Ejecutar todos los tests
 npm test
 
-# Run specific test suites
+# Ejecutar tests unitarios
 npm run test:unit
+
+# Ejecutar tests de integración
 npm run test:integration
 
-# Generate coverage report
+# Generar reporte de cobertura
 npm run test:coverage
 ```
 
 ---
 
-## 📡 **API Endpoints**
+## 📡 **Endpoints de la API**
 
-### **Patients**
-| Method | Endpoint | Description | Status Codes |
-|--------|----------|-------------|--------------|
-| `GET` | `/api/patients` | Get all patients | `200` |
-| `POST` | `/api/patients` | Create new patient | `201`, `400`, `409` |
-| `GET` | `/api/patients/:id` | Get patient from ID | `200`, `400`, `404` |
-| `PUT` | `/api/patients/:id` | Update patient data | `200`, `400`, `404` |
+### **Pacientes**
+| Método | Endpoint | Descripción | Códigos |
+|--------|----------|-------------|---------|
+| `GET`  | `/api/patients`        | Obtener todos los pacientes      | `200` |
+| `POST` | `/api/patients`        | Crear un nuevo paciente          | `201`, `400`, `409` |
+| `GET`  | `/api/patients/:id`    | Obtener paciente por ID          | `200`, `400`, `404` |
+| `PUT`  | `/api/patients/:id`    | Actualizar datos de paciente     | `200`, `400`, `404` |
 
-### **Request/Response Examples**
+### **Ejemplos de request/response**
 
-#### **Create Patient**
+#### **Crear paciente**
 ```http
 POST /api/patients
 Content-Type: application/json
@@ -142,7 +144,7 @@ Content-Type: application/json
 }
 ```
 
-**Response (201 Created)**
+**Respuesta (201 Created)**
 ```json
 {
   "success": true,
@@ -160,12 +162,12 @@ Content-Type: application/json
 }
 ```
 
-#### **Get All Patients**
+#### **Obtener todos los pacientes**
 ```http
 GET /api/patients
 ```
 
-**Response (200 OK)**
+**Respuesta (200 OK)**
 ```json
 {
   "success": true,
@@ -184,9 +186,9 @@ GET /api/patients
 }
 ```
 
-#### **Error Responses**
+#### **Respuestas de error**
 
-**Validation Error (400)**
+**Error de validación (400)**
 ```json
 {
   "success": false,
@@ -195,7 +197,7 @@ GET /api/patients
 }
 ```
 
-**Duplicate Email (409)**
+**Email duplicado (409)**
 ```json
 {
   "success": false,
@@ -204,7 +206,7 @@ GET /api/patients
 }
 ```
 
-**Server Error (500)**
+**Error de servidor (500)**
 ```json
 {
   "success": false,
@@ -215,180 +217,249 @@ GET /api/patients
 
 ---
 
-## 🏗️ **Architecture**
+## 🏗️ **Arquitectura Clean**
 
-### **Project Structure**
+### **Estructura del proyecto**
 ```
 medication-management-api/
 ├── src/
-│   ├── controllers/        # HTTP request handlers
-│   ├── services/           # Business logic layer
-│   ├── models/             # Data access layer
-│   ├── routes/             # API route definitions
-│   ├── middleware/         # Custom middleware
-│   └── app.js             # Express application setup
+│   ├── domain/            # Entidades y contratos de repositorio
+│   ├── application/       # Casos de uso (lógica de negocio)
+│   ├── infrastructure/    # Implementaciones (DB, servicios externos)
+│   ├── interfaces/        # Controladores y rutas HTTP
+│   ├── shared/            # Utilidades, errores comunes
+│   └── app.js             # Configuración de Express
 ├── tests/
-│   ├── unit/              # Isolated unit tests
-│   ├── integration/       # End-to-end tests
-│   ├── helpers/           # Test utilities
-│   └── setup.js           # Test configuration
+│   ├── unit/              # Pruebas unitarias por capa
+│   ├── integration/       # Pruebas de integración API/DB
+│   ├── helpers/           # Utilidades y mocks
+│   └── setup.js           # Configuración de tests
 ├── config/
-│   └── database.js        # Database connection
-├── server.js              # Application entry point
+│   └── database.js        # Conexión a la base de datos
+├── server.js              # Punto de entrada
 └── package.json
 ```
 
-### **MVC Pattern Flow**
+### **Flujo Clean Architecture**
 ```
-Request → Router → Controller → Service → Model → Database
+Request → Route → Controller → UseCase → Repository → DB
                      ↓
-Response ← JSON ← Controller ← Service ← Model ← Database
+Response ← Controller ← UseCase ← Repository ← DB
 ```
 
-### **Layer Responsibilities**
-- **Controllers**: Handle HTTP requests/responses
-- **Services**: Implement business logic and validation
-- **Models**: Database queries and data access
-- **Routes**: Define API endpoints and middleware
+### **Responsabilidades por capa**
+- **Domain:** Entidades, validaciones, contratos
+- **Application:** Casos de uso, lógica de negocio
+- **Infrastructure:** Base de datos, servicios externos
+- **Interfaces:** Controladores, rutas, adaptadores
+- **Shared:** Utilidades, errores comunes
+
+---
+## 🧪 **Mejorando la cobertura**
+
+### ¿Cómo revisar líneas sin cubrir?
+
+1. Ejecuta:
+   ```bash
+   npm run test -- --coverage
+   ```
+2. Abre el reporte HTML:
+   ```
+   coverage/lcov-report/index.html
+   ```
+3. Busca las líneas en rojo (sin cubrir).
+4. Analiza si son:
+   - Paths de error (catch, validaciones, branches poco probables)
+   - Código importante (validaciones, errores que pueden ocurrir)
+   - Código imposible o redundante (por ejemplo, métodos abstractos)
+5. Si son importantes, agrega tests que los cubran.
+6. Si son imposibles o redundantes, puedes ignorarlos, pero documenta la razón.
+
+**Nota:** Los métodos abstractos (como los de interfaces) no requieren cobertura.
+
+**Recomendación:** Apunta a cubrir al menos el 80% del código, priorizando paths críticos y validaciones.
 
 ---
 
-## 🧪 **Testing Strategy**
+## 🧪 **Estrategia de testing**
 
-### **Unit Tests**
-- **Isolation**: Each layer tested independently with mocks
-- **Coverage**: 100% of functions, branches, and statements
-- **Fast Execution**: No external dependencies
-- **Location**: `tests/unit/`
+### **Pruebas unitarias**
+- Cada capa se prueba de forma aislada usando mocks
+- Ejecución rápida, sin dependencias externas
+- Ubicación: `tests/unit/`
 
-### **Integration Tests**  
-- **Real Database**: Tests against actual PostgreSQL instance
-- **End-to-End**: Complete request lifecycle validation
-- **Error Scenarios**: Database constraints and validation testing
-- **Location**: `tests/integration/`
+### **Pruebas de integración**
+- Pruebas contra una instancia real de PostgreSQL
+- Validación de ciclo completo de requests y errores
+- Ubicación: `tests/integration/`
 
-### **Running Tests**
-```bash
-# Watch mode for development
-npm run test:watch
+### **Comandos útiles de testing y scripts npm**
 
-# Specific test suites
-npm run test:unit:services
-npm run test:unit:models
-npm run test:unit:controllers
+| Script                | Descripción                                 |
+|-----------------------|---------------------------------------------|
+| `npm run dev`         | Inicia el servidor en modo desarrollo        |
+| `npm start`           | Inicia el servidor en modo producción        |
+| `npm test`            | Ejecuta todos los tests                     |
+| `npm run test:unit`   | Ejecuta tests unitarios                     |
+| `npm run test:integration` | Ejecuta tests de integración             |
+| `npm run test:coverage`    | Genera reporte de cobertura              |
+| `npm run test:watch`  | Ejecuta tests en modo watch (desarrollo)    |
+| `npm run test:unit:services` | Testea solo casos de uso               |
+| `npm run test:unit:models`   | Testea solo repositorios               |
+| `npm run test:unit:controllers` | Testea solo controladores           |
 
-# Integration tests only
-npm run test:integration
-
-# Coverage with HTML report
-npm run test:coverage
-```
+> Puedes consultar todos los scripts disponibles en `package.json`.
 
 ---
 
-## 🔧 **Environment Variables**
+## 🔧 **Variables de entorno**
 
-Create a `.env` file in the root directory:
+Configura tus variables de entorno usando el archivo `.env.example` como plantilla:
 
 ```bash
-# Database Configuration
+cp .env.example .env
+# Edita .env con tus credenciales reales
+```
+
+> **Importante:** Nunca subas tu archivo `.env` real al repositorio. Usa `.env.example` para compartir la estructura de variables.
+
+Crea el archivo `.env` en la raíz del proyecto con los siguientes valores:
+
+```bash
+# Configuración de la base de datos
 DB_USER=postgres
 DB_HOST=localhost
 DB_NAME=clinical_cases_db
 DB_NAME_TEST=clinical_cases_test_db
-DB_PASSWORD=your_password_here
+DB_PASSWORD=tu_password_aqui
 DB_PORT=5432
 
-# Server Configuration
+# Configuración del servidor
 PORT=3000
 NODE_ENV=development
 ```
 
 ---
 
-## 🚦 **Error Handling**
+## 🚦 **Manejo de errores**
 
-The API implements comprehensive error handling with appropriate HTTP status codes:
+La API implementa manejo de errores con códigos HTTP apropiados:
 
-| Status Code | Type | Description |
-|-------------|------|-------------|
-| `200` | Success | Request successful |
-| `201` | Created | Resource created successfully |
-| `400` | Bad Request | Validation errors |
-| `404` | Not Found  | Not found errors |
-| `409` | Conflict | Duplicate resource errors |
-| `500` | Server Error | Internal server errors |
+| Código | Tipo      | Descripción                  |
+|--------|-----------|------------------------------|
+| `200`  | Éxito     | Request exitosa              |
+| `201`  | Creado    | Recurso creado correctamente |
+| `400`  | Error     | Errores de validación        |
+| `404`  | No existe | Recurso no encontrado        |
+| `409`  | Conflicto | Recurso duplicado            |
+| `500`  | Servidor  | Error interno del servidor   |
 
-**Error Response Structure**
+**Estructura de respuesta de error**
 ```json
 {
   "success": false,
-  "message": "Human-readable error message", 
-  "type": "error_category"
+  "message": "Mensaje de error legible", 
+  "type": "categoría_error"
 }
 ```
 
 ---
 
-## 🛠️ **Tech Stack**
+---
+
+## Despliegue local con Docker
+
+Levanta toda la infraestructura (Node.js, PostgreSQL y Redis) con un solo comando:
+
+```bash
+docker-compose up --build
+```
+
+Esto hará:
+- Construir la imagen de la app Node.js en modo desarrollo.
+- Levantar una base de datos PostgreSQL (puerto local 5433).
+- Levantar un servidor Redis (puerto local 6380).
+
+Para detener y eliminar los contenedores:
+
+```bash
+docker-compose down
+```
+
+Los datos de la base y Redis se mantienen en volúmenes persistentes (no se pierden al bajar los servicios).
+
+Si necesitas limpiar los datos completamente, ejecuta:
+
+```bash
+docker-compose down -v
+```
+Asegúrate de que tus variables de entorno en la app coincidan con las del servicio (ver docker-compose.yml).
+
+---
+
+## 🛠️ **Stack tecnológico**
 
 ### **Backend**
-- **Runtime**: Node.js 18+
-- **Framework**: Express.js 5.x
-- **Database**: PostgreSQL 13+ with pg driver
-- **Testing**: Jest 29.x + Supertest 6.x
-- **Environment**: dotenv for configuration
+- **Runtime:** Node.js 18+
+- **Framework:** Express.js 5.x
+- **Base de datos:** PostgreSQL 13+ (driver pg)
+- **Testing:** Jest 30.x + Supertest 7.x
+- **Variables de entorno:** dotenv
 
-### **Database**
-- **ORM**: Raw SQL with pg connection pooling
-- **Constraints**: Email uniqueness, required fields
-- **Indexes**: Primary keys on all tables
-- **Migrations**: Manual SQL scripts
-
----
-
-## 📈 **Performance Metrics**
-
-- **Test Execution**: ~3.2s for full test suite (50 tests)
-- **Coverage Generation**: ~1.5s additional
-- **API Response Time**: <100ms for typical operations
-- **Database Queries**: Optimized with proper indexing
+### **Base de datos**
+- **ORM:** SQL nativo con pool de conexiones
+- **Restricciones:** Unicidad de email, campos obligatorios
+- **Índices:** Clave primaria en todas las tablas
+- **Migraciones:** Scripts SQL manuales
 
 ---
 
-## 🎯 **Best Practices**
+## 📈 **Métricas de performance**
 
-- ✅ **Separation of Concerns**: MVC architecture
-- ✅ **Error Handling**: Centralized middleware
-- ✅ **Input Validation**: Service layer validation
-- ✅ **Database Security**: Parameterized queries
-- ✅ **Environment Configuration**: dotenv usage
-- ✅ **Testing**: Comprehensive unit and integration tests
-- ✅ **Code Quality**: 100% test coverage
-- ✅ **Git Workflow**: Feature branches and clean commits
+- **Ejecución de tests:** ~4s para el suite completo (61 tests)
+- **Generación de cobertura:** ~1.5s adicional
+- **Tiempo de respuesta API:** <100ms en operaciones típicas
+- **Consultas a DB:** Optimizadas con índices
 
 ---
 
-## 🤝 **Contributing**
+## 🎯 **Buenas prácticas**
 
-1. Fork the repository
-2. Create a feature branch: `git checkout -b feature/amazing-feature`
-3. Make your changes
-4. Run tests: `npm test`
-5. Ensure 100% coverage: `npm run test:coverage`
-6. Commit changes: `git commit -m 'feat: add amazing feature'`
-7. Push to branch: `git push origin feature/amazing-feature`
-8. Open a Pull Request
-
----
-
-## 📄 **License**
-
-This project is licensed under the ISC License.
+- ✅ **CI/CD:** Los tests y cobertura se ejecutan automáticamente en cada Pull Request y push a main usando GitHub Actions ([ver workflow](.github/workflows/ci.yml)).
+- ✅ **Separación de capas:** Clean Architecture
+- ✅ **Manejo de errores:** Middleware centralizado
+- ✅ **Validación de entrada:** En entidades y casos de uso
+- ✅ **Seguridad en DB:** Consultas parametrizadas
+- ✅ **Configuración:** dotenv
+- ✅ **Testing:** Pruebas unitarias y de integración
+- ✅ **Cobertura:** >90% recomendado
+- ✅ **Git:** Branches por feature y commits limpios
+- ✅ **Seguridad de dependencias:** Revisa periódicamente con `npm audit` y considera usar [dependabot](https://github.com/dependabot).
 
 ---
 
-## 👨‍💻 **Author**
+## 🤝 **Contribuir**
+
+1. Haz un fork del repositorio
+2. Crea una rama: `git checkout -b feature/mi-feature`
+3. Realiza tus cambios
+4. Corre los tests: `npm test`
+5. Verifica la cobertura: `npm run test:coverage`
+6. Haz commit: `git commit -m 'feat: agrega mi feature'`
+7. Sube la rama: `git push origin feature/mi-feature`
+8. Abre un Pull Request
+
+---
+
+## 📄 **Licencia**
+
+Este proyecto está bajo licencia ISC.
+
+[Ver archivo LICENSE](./LICENSE)
+
+---
+
+## 👨‍💻 **Autor**
 
 **Daniel Mamani**
 - **LinkedIn**: [Daniel Mamani](https://www.linkedin.com/in/daniel-mamani-b03b5a204)
@@ -396,18 +467,18 @@ This project is licensed under the ISC License.
 
 ---
 
-## 🌟 **Acknowledgments**
+## 🌟 **Agradecimientos**
 
-- Built with modern Node.js best practices
-- Inspired by enterprise-level API design patterns
-- Testing strategies from industry leaders
+- Construido siguiendo buenas prácticas modernas de Node.js
+- Inspirado en patrones de diseño de APIs empresariales
+- Estrategias de testing de referentes de la industria
 
 ---
 
 <div align="center">
 
-**⭐ Star this repository if you find it helpful!**
+**⭐ ¡Dale una estrella si te resultó útil!**
 
-Made with ❤️ for the developer community
+Hecho con ❤️ para la comunidad desarrolladora
 
 </div>
