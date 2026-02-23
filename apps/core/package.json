@@ -13,7 +13,7 @@
     "test:unit:cases": "jest tests/unit/application/use-cases",
     "test:unit:repositories": "jest tests/unit/infrastructure/database",
     "test:unit:controllers": "jest tests/unit/interfaces/controllers",
-    "test:integration": "jest tests/integration",
+    "test:integration": "node --experimental-vm-modules node_modules/.bin/jest tests/integration",
     "migrate": "dotenv -e ../../.env -- node-pg-migrate up -m migrations",
 "migrate:test": "dotenv -e ../../.env -- node-pg-migrate up -d $DATABASE_TEST_URL -m migrations"
   },

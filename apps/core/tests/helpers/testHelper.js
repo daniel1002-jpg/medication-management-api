@@ -1,5 +1,8 @@
 import { Pool } from 'pg';
 import { jest } from '@jest/globals';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: './apps/core/.env' });
 
 // Mock data para tests unitarios
 export const mockPatientData = {
@@ -42,9 +45,9 @@ export function createMockRepo(overrides = {}) {
 
 // Pool y helpers para tests de integración
 console.log('TEST POOL ENV:', {
-    POSTGRES_USER: process.env.POSTGRES_USER,
-    POSTGRES_PASSWORD: process.env.POSTGRES_PASSWORD,
-    POSTGRES_TEST_DB: process.env.POSTGRES_TEST_DB,
+    DB_USER: process.env.DB_USER,
+    DB_PASSWORD: process.env.DB_PASSWORD,
+    DB_NAME_TEST: process.env.DB_NAME_TEST,
     DB_HOST: process.env.DB_HOST,
     DB_PORT: process.env.DB_PORT,
     DB_USER: process.env.DB_USER,
@@ -52,13 +55,12 @@ console.log('TEST POOL ENV:', {
     DB_NAME: process.env.DB_NAME,
     NODE_ENV: process.env.NODE_ENV
 });
-
 export const testPool = new Pool({
-        user: process.env.POSTGRES_USER,
-        host: process.env.DB_HOST,
-        database: process.env.POSTGRES_TEST_DB,
-        password: process.env.POSTGRES_PASSWORD,
-        port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
+    user: process.env.DB_USER || 'postgres',
+    host: process.env.DB_HOST || 'localhost',
+    database: process.env.DB_NAME_TEST || process.env.DB_NAME || 'clinical_cases_test_db',
+    password: process.env.DB_PASSWORD || 'postgres',
+    port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
 });
 
 export async function resetPacientesTable() {

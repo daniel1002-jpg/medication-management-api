@@ -38,21 +38,22 @@ jobs:
 
       - name: Set environment variables
         run: |
-          echo "DATABASE_TEST_URL=postgres://postgres:postgres@localhost:5432/clinical_cases_test_db" >> $GITHUB_ENV
+          echo "DB_TEST_URL=postgres://postgres:postgres@localhost:5432/clinical_cases_test_db" >> $GITHUB_ENV
 
       - name: Run DB migrations
-        run: bash migrate-db.sh DATABASE_TEST_URL
+        run: bash migrate-db.sh DB_TEST_URL
         working-directory: apps/core
         env:
-          DATABASE_URL: ${{ env.DATABASE_TEST_URL }}
+          DB_URL: ${{ env.DB_TEST_URL }}
 
       - name: Set environment variables
         run: |
-          echo "POSTGRES_USER=postgres" >> $GITHUB_ENV
-          echo "POSTGRES_PASSWORD=postgres" >> $GITHUB_ENV
-          echo "POSTGRES_TEST_DB=clinical_cases_test_db" >> $GITHUB_ENV
-          echo "DB_HOST=localhost" >> $GITHUB_ENV
-          echo "DB_PORT=5432" >> $GITHUB_ENV
+          echo \"DB_USER=postgres\" >> $GITHUB_ENV
+          echo \"DB_PASSWORD=postgres\" >> $GITHUB_ENV
+          echo \"DB_NAME=clinical_cases_db\" >> $GITHUB_ENV
+          echo \"DB_NAME_TEST=clinical_cases_test_db\" >> $GITHUB_ENV
+          echo \"DB_HOST=localhost\" >> $GITHUB_ENV
+          echo \"DB_PORT=5432\" >> $GITHUB_ENV
 
       - name: Wait for Postgres
         run: |
