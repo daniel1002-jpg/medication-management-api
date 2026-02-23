@@ -66,11 +66,11 @@ jobs:
           done
 
       - name: Run tests
-        run: npm test
+        run: node --experimental-vm-modules node_modules/.bin/jest
         working-directory: apps/core
 
       - name: Run coverage
-        run: npm run test:coverage
+        run: node --experimental-vm-modules node_modules/.bin/jest --coverage
         working-directory: apps/core
 
       - name: Upload coverage report
