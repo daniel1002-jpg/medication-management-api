@@ -1,5 +1,8 @@
 import { Pool } from 'pg';
 import { jest } from '@jest/globals';
+import dotenv from 'dotenv';
+
+dotenv.config({ path: './apps/core/.env' });
 
 // Mock data para tests unitarios
 export const mockPatientData = {
@@ -42,10 +45,10 @@ export function createMockRepo(overrides = {}) {
 
 // Pool y helpers para tests de integración
 export const testPool = new Pool({
-    user: process.env.POSTGRES_USER || 'postgres',
+    user: process.env.DB_USER || 'postgres',
     host: process.env.DB_HOST || 'localhost',
-    database: process.env.POSTGRES_TEST_DB || 'clinical_cases_test_db',
-    password: process.env.POSTGRES_PASSWORD || 'postgres',
+    database: process.env.DB_NAME_TEST || process.env.DB_NAME || 'clinical_cases_test_db',
+    password: process.env.DB_PASSWORD || 'postgres',
     port: process.env.DB_PORT ? parseInt(process.env.DB_PORT) : 5432,
 });
 

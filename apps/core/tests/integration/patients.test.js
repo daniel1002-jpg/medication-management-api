@@ -2,13 +2,20 @@ import request from 'supertest';
 import app from '../../src/app.js';
 import { testPool, resetPacientesTable } from '../helpers/testHelper.js';
 
+let server;
+
 describe('Patients API Integration Tests', () => {
+    beforeAll((done) => {
+        server = app.listen(0, done);
+    });
+    
     beforeEach(async () => {
         await resetPacientesTable();
     });
 
     afterAll(async () => {
         await testPool.end();
+        await new Promise((resolve) => server.close(resolve));
     });
 
     describe('POST /api/patients', () => {
@@ -22,7 +29,7 @@ describe('Patients API Integration Tests', () => {
         };
 
         it('should create patient and store in database end-to-end', async () => {
-            const createResponse = await request(app)
+            const createResponse = await request(server)
                 .post('/api/patients')
                 .send(validPatientData)
                 .expect(201);
@@ -49,7 +56,7 @@ describe('Patients API Integration Tests', () => {
         });
 
         it('should validate email uniqueness at database level', async () => {
-            await request(app)
+            await request(server)
                 .post('/api/patients')
                 .send(validPatientData)
                 .expect(201);
@@ -59,7 +66,7 @@ describe('Patients API Integration Tests', () => {
                 nombre: 'Another Name'
             };
 
-            const response = await request(app)
+            const response = await request(server)
                 .post('/api/patients')
                 .send(duplicateData)
                 .expect(409);
@@ -76,7 +83,7 @@ describe('Patients API Integration Tests', () => {
         });
 
         it('should validate required fields without touching database', async () => {
-            const response = await request(app)
+            const response = await request(server)
                 .post('/api/patients')
                 .send({email: 'only@email.com'})
                 .expect(400);
@@ -96,7 +103,7 @@ describe('Patients API Integration Tests', () => {
 
     describe('GET /api/patients', () => {
         it('should return empty array when no patients exist', async () => {
-            const response = await request(app)
+            const response = await request(server)
                 .get('/api/patients')
                 .expect(200);
 
@@ -114,7 +121,7 @@ describe('Patients API Integration Tests', () => {
                     ('Patient 2', 'patient2@test.com', '222222222', 'Street 2', '1990-01-01', '2025-01-01', 'Swiss Medical')
             `);
 
-            const response = await request(app)
+            const response = await request(server)
                 .get('/api/patients')
                 .expect(200);
 
@@ -145,7 +152,7 @@ describe('Patients API Integration Tests', () => {
             };
 
             // Step 1: Create patient via POST
-            const createResponse = await request(app)
+            const createResponse = await request(server)
                 .post('/api/patients')
                 .send(patientData)
                 .expect(201);
@@ -154,7 +161,7 @@ describe('Patients API Integration Tests', () => {
             expect(createdPatientId).toBeDefined();
 
             // Step 2: Retrieve all patients via GET
-            const getResponse = await request(app)
+            const getResponse = await request(server)
                 .get('/api/patients')
                 .expect(200);
 
@@ -178,7 +185,7 @@ describe('Patients API Integration Tests', () => {
                 VALUES ('Test Patient', 'test@example.com', '123456789', 'Street 1', '1990-01-01', '2025-01-01', 'OSDE')
             `);
 
-            const response = await request(app)
+            const response = await request(server)
                 .get('/api/patients/1')
                 .expect(200);
             
@@ -191,7 +198,7 @@ describe('Patients API Integration Tests', () => {
         });
 
         it('should return 404 when patient does not exist', async () => {
-            const response = await request(app)
+            const response = await request(server)
                 .get('/api/patients/999')
                 .expect(404);
 
@@ -219,7 +226,7 @@ describe('Patients API Integration Tests', () => {
                 obra_social: 'Swiss Medical'
             };
 
-            const response = await request(app)
+            const response = await request(server)
                 .put('/api/patients/1')
                 .send(updateData)
                 .expect(200);
@@ -260,7 +267,7 @@ describe('Patients API Integration Tests', () => {
                 obra_social: 'Ninguna'
             };
 
-            const response = await request(app)
+            const response = await request(server)
                 .put('/api/patients/999')
                 .send(updateData)
                 .expect(404);
