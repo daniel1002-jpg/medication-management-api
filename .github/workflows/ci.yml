@@ -47,7 +47,7 @@ jobs:
           echo "DB_PORT=5432" >> $GITHUB_ENV
 
       - name: Run DB migrations
-        run: bash migrate-db.sh
+        run: ./migrate-db.sh test
         working-directory: apps/core
         env:
           DB_USER: ${{ env.DB_USER }}
