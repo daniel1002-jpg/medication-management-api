@@ -1,0 +1,19 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "outDir": "dist",
+    "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,
+    "resolveJsonModule": true,
+    "allowJs": true,
+    "noEmit": false,
+    "types": ["node", "jest", "express", "pg", "supertest"]
+  },
+  "include": ["src/**/*", "tests/**/*", "*.ts", "*.tsx"],
+  "exclude": ["node_modules", "dist"]
+}
