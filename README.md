@@ -1,38 +1,83 @@
-# 🏥 API de Gestión de Medicación
 
-> **API Node.js** con arquitectura Clean, testing profesional y cobertura de código medible
+# 🏥 VitalSync – API de Gestión de Medicación
+
+> **VitalSync** es un sistema distribuido de gestión de tratamientos médicos y adherencia, diseñado para garantizar que ningún paciente crítico pierda una dosis. Su arquitectura asíncrona y tolerante a fallos asegura la confiabilidad clínica y la auditabilidad de los eventos vitales.
 
 [![Node.js](https://img.shields.io/badge/Node.js-18+-green.svg)](https://nodejs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-4.9%2B-blue.svg)](https://www.typescriptlang.org/)
 [![PostgreSQL](https://img.shields.io/badge/PostgreSQL-13+-blue.svg)](https://postgresql.org/)
-[![Cobertura](https://img.shields.io/badge/Cobertura-94%25-brightgreen.svg)](./coverage/lcov-report/index.html)
-[![Tests](https://img.shields.io/badge/Tests-61%20passing-success.svg)](./coverage/lcov-report/index.html)
+[![Cobertura](https://img.shields.io/badge/Cobertura-97%25-brightgreen.svg)](./coverage/lcov-report/index.html)
+[![Tests](https://img.shields.io/badge/Tests-81%20passing-success.svg)](./coverage/lcov-report/index.html)
 
-API REST para la gestión de pacientes en entornos clínicos, basada en Clean Architecture, con separación de capas, pruebas unitarias y de integración. Cobertura actual: **94%**.
+API REST para la gestión de pacientes, tratamientos y adherencia, basada en Clean Architecture, con separación de capas, pruebas unitarias y de integración, y cobertura profesional. Cobertura actual: **97%**.
 
 ---
 
-## ✨ **Características principales**
+## 🌟 Visión y propósito
 
-- 🏗️ **Clean Architecture**: Separación en Domain, Application, Infrastructure, Interfaces y Shared
-- 🧪 **Testing profesional**: Pruebas unitarias y de integración con Jest y Supertest
-- 🔒 **Validación de datos**: Validaciones y normalización en entidades y casos de uso
-- 🗄️ **PostgreSQL**: Capa de infraestructura desacoplada
+VitalSync es un sistema de salud tolerante a fallos, orientado a clínicas y hospitales que requieren trazabilidad y confiabilidad en la administración de medicación. El objetivo es que ningún paciente crítico pierda una dosis, incluso ante caídas de servicios.
+
+---
+
+## 🚀 Casos de uso principales
+
+- Gestión de tratamientos y posología
+- Motor de recordatorios inquebrantable (cálculo y programación automática)
+- Tracking de adherencia (log de tomas auditables)
+- Gestión de pacientes y su historial
+
+---
+
+## 🗄️ Modelo de datos (PostgreSQL)
+
+- **Pacientes:** Datos personales e historial
+- **Medicamentos:** Catálogo maestro (droga activa, presentación)
+- **Tratamientos:** Nexo paciente-medicamento (fechas, notas)
+- **Tomas_Programadas:** Estado de cada toma ('pendiente', 'tomada', 'omitida')
+
+---
+
+## 🏗️ Arquitectura distribuida y tolerante a fallos
+
+- **Core API:** Node.js + TypeScript (Clean Architecture)
+- **Workers:** Rust (procesamiento asíncrono y tolerante a fallos)
+- **Mensajería:** Redis + BullMQ (eventos y trabajos asincrónicos)
+- **DB:** PostgreSQL
+- **Infraestructura:** Docker Compose & Monorepo
+
+La API expone endpoints REST y produce eventos a una cola de Redis. Los workers de Rust procesan los eventos en segundo plano, desacoplando la lógica y aumentando la resiliencia del sistema.
+
+---
+
+---
+
+
+## ✨ Características principales
+
+- 🏗️ **Clean Architecture**: Separación estricta en Domain, Application, Infrastructure, Interfaces y Shared
+- 🧪 **Testing profesional**: Unitarios y de integración con Jest y Supertest, cobertura >95%
+- 🔒 **Validación y normalización**: En entidades y casos de uso
+- 🗄️ **Infraestructura desacoplada**: PostgreSQL, Redis, Docker
 - 🚦 **Manejo de errores**: Respuestas estructuradas y códigos HTTP correctos
-- 🔧 **Ambientes separados**: Bases de datos para desarrollo y testing
+- 🔧 **Ambientes separados**: Bases de datos para desarrollo, testing y producción
+- 🛡️ **Tolerancia a fallos**: Arquitectura asíncrona y resiliente
+- 📈 **CI/CD**: Workflows automáticos con GitHub Actions
 
 ---
 
-## 🧪 **Testing y cobertura**
 
-### **📊 Cobertura actual**
+## 🧪 Testing y cobertura
+
+### 📊 Cobertura actual
 ```
-Statements : 94.2%
-Branches   : 83.33%
-Functions  : 82.85%
-Lines      : 94.2%
+Statements : 97.5%
+Branches   : 90%
+Functions  : 100%
+Lines      : 97.5%
+Tests      : 81
 ```
 
-### **Estructura de pruebas**
+### Estructura de pruebas
 - **Unitarias:**
   - Entidades (domain)
   - Casos de uso (application)
@@ -40,18 +85,22 @@ Lines      : 94.2%
   - Controladores (interfaces)
 - **Integración:**
   - API completa contra base de datos real
-  - Validación de errores y restricciones
+  - Validación de errores, restricciones y flujos críticos
 
 ---
 
-## 🚀 **Inicio rápido**
 
-### **Requisitos**
+## 🚀 Inicio rápido
+
+
+### Requisitos
 - Node.js 18+
+- TypeScript 4.9+
 - PostgreSQL 13+
+- Redis 6+
 - npm o yarn
 
-### **Instalación**
+### Instalación
 ```bash
 # Clonar el repositorio
 git clone https://github.com/daniel1002-jpg/medication-management-api.git
@@ -65,7 +114,7 @@ cp .env.example .env
 # Edita .env con tus credenciales de base de datos
 ```
 
-### **Configuración de la base de datos**
+### Configuración de la base de datos
 ```sql
 -- Crear base de datos de desarrollo
 CREATE DATABASE clinical_cases_db;
@@ -77,16 +126,17 @@ CREATE DATABASE clinical_cases_test_db;
 \c clinical_cases_db
 
 -- Crear tabla de pacientes
+CREATE EXTENSION IF NOT EXISTS "pgcrypto";
+
 CREATE TABLE pacientes (
-  id SERIAL PRIMARY KEY,
-  nombre VARCHAR(255) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
+  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  nombre VARCHAR(100) NOT NULL,
+  email VARCHAR(100) UNIQUE NOT NULL,
   numero_telefono VARCHAR(20),
-  domicilio TEXT,
+  domicilio VARCHAR(200),
   fecha_nacimiento DATE,
-  fecha_alta DATE,
-  obra_social VARCHAR(255),
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+  fecha_alta TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  obra_social VARCHAR(100)
 );
 
 -- Repetir para la base de testing
@@ -94,7 +144,7 @@ CREATE TABLE pacientes (
 -- (ejecutar el mismo comando CREATE TABLE)
 ```
 
-### **Ejecutar la aplicación**
+### Ejecutar la aplicación
 ```bash
 # Servidor de desarrollo
 npm run dev
@@ -117,17 +167,19 @@ npm run test:coverage
 
 ---
 
-## 📡 **Endpoints de la API**
 
-### **Pacientes**
+## 📡 Endpoints de la API
+
+### Pacientes
 | Método | Endpoint | Descripción | Códigos |
 |--------|----------|-------------|---------|
-| `GET`  | `/api/patients`        | Obtener todos los pacientes      | `200` |
-| `POST` | `/api/patients`        | Crear un nuevo paciente          | `201`, `400`, `409` |
-| `GET`  | `/api/patients/:id`    | Obtener paciente por ID          | `200`, `400`, `404` |
-| `PUT`  | `/api/patients/:id`    | Actualizar datos de paciente     | `200`, `400`, `404` |
+| `GET`    | `/api/patients`        | Obtener todos los pacientes      | `200` |
+| `POST`   | `/api/patients`        | Crear un nuevo paciente          | `201`, `400`, `409` |
+| `GET`    | `/api/patients/:id`    | Obtener paciente por ID          | `200`, `400`, `404` |
+| `PUT`    | `/api/patients/:id`    | Actualizar datos de paciente     | `200`, `400`, `404` |
+| `DELETE` | `/api/patients/:id`    | Eliminar paciente                | `200`, `400`, `404` |
 
-### **Ejemplos de request/response**
+### Ejemplos de request/response
 
 #### **Crear paciente**
 ```http
@@ -217,9 +269,10 @@ GET /api/patients
 
 ---
 
-## 🏗️ **Arquitectura Clean**
 
-### **Estructura del proyecto**
+## 🏗️ Arquitectura Clean y distribuida
+
+### Estructura del proyecto
 ```
 medication-management-api/
 ├── src/
@@ -240,14 +293,14 @@ medication-management-api/
 └── package.json
 ```
 
-### **Flujo Clean Architecture**
+### Flujo Clean Architecture
 ```
 Request → Route → Controller → UseCase → Repository → DB
                      ↓
 Response ← Controller ← UseCase ← Repository ← DB
 ```
 
-### **Responsabilidades por capa**
+### Responsabilidades por capa
 - **Domain:** Entidades, validaciones, contratos
 - **Application:** Casos de uso, lógica de negocio
 - **Infrastructure:** Base de datos, servicios externos
@@ -255,7 +308,8 @@ Response ← Controller ← UseCase ← Repository ← DB
 - **Shared:** Utilidades, errores comunes
 
 ---
-## 🧪 **Mejorando la cobertura**
+
+## 🧪 Mejorando la cobertura
 
 ### ¿Cómo revisar líneas sin cubrir?
 
@@ -281,19 +335,20 @@ Response ← Controller ← UseCase ← Repository ← DB
 
 ---
 
-## 🧪 **Estrategia de testing**
 
-### **Pruebas unitarias**
+## 🧪 Estrategia de testing
+
+### Pruebas unitarias
 - Cada capa se prueba de forma aislada usando mocks
 - Ejecución rápida, sin dependencias externas
 - Ubicación: `tests/unit/`
 
-### **Pruebas de integración**
+### Pruebas de integración
 - Pruebas contra una instancia real de PostgreSQL
 - Validación de ciclo completo de requests y errores
 - Ubicación: `tests/integration/`
 
-### **Comandos útiles de testing y scripts npm**
+### Comandos útiles de testing y scripts npm
 
 | Script                | Descripción                                 |
 |-----------------------|---------------------------------------------|
@@ -312,7 +367,8 @@ Response ← Controller ← UseCase ← Repository ← DB
 
 ---
 
-## 🔧 **Variables de entorno**
+
+## 🔧 Variables de entorno
 
 Configura tus variables de entorno usando el archivo `.env.example` como plantilla:
 
@@ -341,7 +397,8 @@ NODE_ENV=development
 
 ---
 
-## 🚦 **Manejo de errores**
+
+## 🚦 Manejo de errores
 
 La API implementa manejo de errores con códigos HTTP apropiados:
 
@@ -367,7 +424,8 @@ La API implementa manejo de errores con códigos HTTP apropiados:
 
 ---
 
-## Despliegue local con Docker
+
+## 🐳 Despliegue local con Docker
 
 Levanta toda la infraestructura (Node.js, PostgreSQL y Redis) con un solo comando:
 
@@ -397,16 +455,17 @@ Asegúrate de que tus variables de entorno en la app coincidan con las del servi
 
 ---
 
-## 🛠️ **Stack tecnológico**
 
-### **Backend**
+## 🛠️ Stack tecnológico
+
+### Backend
 - **Runtime:** Node.js 18+
 - **Framework:** Express.js 5.x
 - **Base de datos:** PostgreSQL 13+ (driver pg)
 - **Testing:** Jest 30.x + Supertest 7.x
 - **Variables de entorno:** dotenv
 
-### **Base de datos**
+### Base de datos
 - **ORM:** SQL nativo con pool de conexiones
 - **Restricciones:** Unicidad de email, campos obligatorios
 - **Índices:** Clave primaria en todas las tablas
@@ -414,16 +473,18 @@ Asegúrate de que tus variables de entorno en la app coincidan con las del servi
 
 ---
 
-## 📈 **Métricas de performance**
 
-- **Ejecución de tests:** ~4s para el suite completo (61 tests)
+## 📈 Métricas de performance
+
+- **Ejecución de tests:** ~4s para el suite completo (81 tests)
 - **Generación de cobertura:** ~1.5s adicional
 - **Tiempo de respuesta API:** <100ms en operaciones típicas
 - **Consultas a DB:** Optimizadas con índices
 
 ---
 
-## 🎯 **Buenas prácticas**
+
+## 🎯 Buenas prácticas de ingeniería
 
 - ✅ **CI/CD:** Los tests y cobertura se ejecutan automáticamente en cada Pull Request y push a main usando GitHub Actions ([ver workflow](.github/workflows/ci.yml)).
 - ✅ **Separación de capas:** Clean Architecture
@@ -438,7 +499,8 @@ Asegúrate de que tus variables de entorno en la app coincidan con las del servi
 
 ---
 
-## 🤝 **Contribuir**
+
+## 🤝 Contribuir
 
 1. Haz un fork del repositorio
 2. Crea una rama: `git checkout -b feature/mi-feature`
@@ -451,7 +513,8 @@ Asegúrate de que tus variables de entorno en la app coincidan con las del servi
 
 ---
 
-## 📄 **Licencia**
+
+## 📄 Licencia
 
 Este proyecto está bajo licencia ISC.
 
@@ -459,15 +522,18 @@ Este proyecto está bajo licencia ISC.
 
 ---
 
-## 👨‍💻 **Autor**
+
+## 👨‍💻 Autor
 
 **Daniel Mamani**
 - **LinkedIn**: [Daniel Mamani](https://www.linkedin.com/in/daniel-mamani-b03b5a204)
 - **GitHub**: [@daniel1002-jpg](https://github.com/daniel1002-jpg)
+- **Portfolio**: [Ver proyectos](https://daniel-mamani.vercel.app)
 
 ---
 
-## 🌟 **Agradecimientos**
+
+## 🌟 Agradecimientos
 
 - Construido siguiendo buenas prácticas modernas de Node.js
 - Inspirado en patrones de diseño de APIs empresariales
@@ -480,5 +546,9 @@ Este proyecto está bajo licencia ISC.
 **⭐ ¡Dale una estrella si te resultó útil!**
 
 Hecho con ❤️ para la comunidad desarrolladora
+
+---
+
+> Documentación técnica y visión de ingeniería: [VitalSync Engineering Docs (Notion)](https://www.notion.so/VitalSync-Engineering-Docs-30dd181de3ba81a9b9b2f73aa2b8ea75)
 
 </div>
